@@ -1,0 +1,274 @@
+/* ============================================================
+   我今天又难受了 · 布艺风格
+   温和的渐变色 + 细密的布纹 + 毛毡颗粒 + 缝线描边
+   ============================================================ */
+
+:root {
+  --ink: #4f4347;
+  --ink-2: #7c6d71;
+  --ink-3: #a99b9e;
+  --line: #ebdfd6;
+  --pen: #e07c85;
+  --paper: #fffdf8;
+
+  /* 渐变布料 */
+  --g-rose: linear-gradient(140deg, #fbe3e0, #f3c5cc);
+  --g-peach: linear-gradient(140deg, #fdeddf, #f6cdb6);
+  --g-butter: linear-gradient(140deg, #fcf4d8, #f2ddad);
+  --g-sage: linear-gradient(140deg, #e9f2e2, #c9ddc3);
+  --g-mint: linear-gradient(140deg, #e3f4ef, #c1e2db);
+  --g-sky: linear-gradient(140deg, #e4eef9, #c5d6ef);
+  --g-lilac: linear-gradient(140deg, #f0e9f9, #d7cbed);
+  --g-sand: linear-gradient(140deg, #faf3ea, #eadac7);
+  --g-cream: linear-gradient(170deg, #fffbf6, #f7eee5);
+
+  /* 布纹：经纬线 */
+  --weave: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.2) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgb(110 80 70 / 0.03) 0 1px, transparent 1px 3px);
+  /* 毛毡颗粒 */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .32 0 0 0 0 .28 0 0 0 .16 -.04'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  --shadow-felt: 0 1px 0 rgb(255 255 255 / 0.75) inset, 0 -1px 0 rgb(120 90 80 / 0.06) inset,
+    0 10px 24px -12px rgb(120 86 76 / 0.35), 0 2px 5px rgb(120 86 76 / 0.08);
+  --shadow-soft: 0 6px 18px -10px rgb(120 86 76 / 0.4);
+
+  --font-hand: 'LXGW WenKai', 'KaiTi', 'STKaiti', 'Kaiti SC', serif;
+  --font-ui: system-ui, -apple-system, 'PingFang SC', 'HarmonyOS Sans SC', 'MiSans', 'Microsoft YaHei UI',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+
+  /* 安全区：Capacitor 注入的变量优先，其次是 iOS / 新版 Chromium 的 env() */
+  --sat: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --sab: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --tabbar-h: 66px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  background: #f5ede7;
+}
+
+/* 整个背景是一块大的渐变棉布 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain), var(--weave), linear-gradient(172deg, #f9efe8 0%, #f4edf3 52%, #eaf0f1 100%);
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: clip;
+}
+
+body.sheet-open {
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+.hand {
+  font-family: var(--font-hand);
+}
+
+/* ---------- 布贴：带缝线的渐变布块 ---------- */
+.patch {
+  --radius: 22px;
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--grain), var(--weave), var(--bg, var(--g-cream));
+  box-shadow: var(--shadow-felt);
+}
+.patch::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1.5px dashed var(--stitch, rgb(255 255 255 / 0.9));
+  pointer-events: none;
+}
+/* 浅色布块上的缝线用深一点的线 */
+.patch.light {
+  --stitch: rgb(176 146 134 / 0.38);
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--grain), var(--weave), var(--bg, var(--g-rose));
+  box-shadow: var(--shadow-felt);
+  color: #5d4248;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: transform 0.15s, opacity 0.2s;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: inherit;
+  border: 1.3px dashed var(--stitch, rgb(255 255 255 / 0.95));
+  pointer-events: none;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn.block {
+  width: 100%;
+}
+.btn.small {
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+.btn.soft {
+  --bg: linear-gradient(140deg, #fffaf5, #f4eae0);
+  --stitch: rgb(176 146 134 / 0.38);
+  color: var(--ink-2);
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.62);
+  box-shadow: var(--shadow-soft);
+  color: var(--ink-2);
+}
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.text-btn {
+  border: 0;
+  background: none;
+  padding: 8px 4px;
+  color: var(--ink-2);
+  font-size: 14px;
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+}
+
+/* ---------- 文字 ---------- */
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+.muted {
+  color: var(--ink-2);
+}
+
+/* ---------- 页面 ---------- */
+.page {
+  padding: calc(var(--sat) + 18px) 18px calc(var(--tabbar-h) + var(--sab) + 30px);
+}
+.page.full {
+  padding-bottom: calc(var(--sab) + 28px);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-bottom: 14px;
+}
+.topbar .title {
+  flex: 1;
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+/* 小人的轻轻浮动 */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* 路由切换 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.2s ease, transform 0.22s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

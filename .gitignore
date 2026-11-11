@@ -1,0 +1,8 @@
+node_modules
+dist
+dev-dist
+.tmp
+*.log
+
+# 设计参考图（别人的记录本照片），不放进公开仓库
+templete.jpg
